@@ -1,0 +1,11 @@
+<div class="pdf-viewer-container w-full h-full overflow-auto bg-gray-100 rounded-lg shadow-inner p-4 relative flex flex-col items-center">
+    <div ng-if="$ctrl.loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+        <span class="material-symbols-outlined animate-spin text-4xl text-electric-ocean">progress_activity</span>
+    </div>
+    <canvas id="pdf-canvas-{{$ctrl.uniqueId}}" class="shadow-md mx-auto"></canvas>
+    <div class="flex gap-4 mt-4" ng-if="$ctrl.totalPages > 0">
+        <button ng-click="$ctrl.prevPage()" ng-disabled="$ctrl.pageNum <= 1" class="px-4 py-2 bg-white rounded shadow disabled:opacity-50">Prev</button>
+        <span class="py-2">Page {{$ctrl.pageNum}} of {{$ctrl.totalPages}}</span>
+        <button ng-click="$ctrl.nextPage()" ng-disabled="$ctrl.pageNum >= $ctrl.totalPages" class="px-4 py-2 bg-white rounded shadow disabled:opacity-50">Next</button>
+    </div>
+</div>

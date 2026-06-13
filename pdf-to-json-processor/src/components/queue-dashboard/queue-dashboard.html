@@ -1,0 +1,31 @@
+<main class="w-full max-w-container-max mx-auto px-gutter py-panel-padding flex flex-col gap-8 items-center justify-start min-h-[calc(100vh-80px)]">
+<!-- Header Section -->
+<div class="w-full max-w-4xl flex flex-col gap-2 items-center text-center mt-8">
+<h1 class="font-display-lg text-display-lg text-charcoal-ink">Document Queue</h1>
+<p class="font-body-lg text-body-lg text-muted-steel max-w-2xl">Upload PDF files for structural parsing and JSON conversion. Our AI-driven engine processes complex tables and hierarchical data in seconds.</p>
+</div>
+<!-- Upload Zone -->
+<div class="w-full max-w-4xl bg-frosted-surface backdrop-blur-2xl rounded-[24px] border-2 border-dashed border-whisper-border upload-pulse upload-zone p-12 flex flex-col items-center justify-center gap-4 shadow-[0_8px_32px_rgba(0,0,0,0.08)] cursor-pointer group">
+<div class="w-20 h-20 rounded-full bg-white/40 flex items-center justify-center mb-4 group-hover:bg-electric-ocean/10 transition-colors">
+<span class="material-symbols-outlined text-[40px] text-electric-ocean" style="font-variation-settings: &quot;FILL&quot; 1;">cloud_upload</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-charcoal-ink text-center">Drag &amp; Drop Documents</h2>
+<p class="font-body-md text-body-md text-muted-steel text-center">or <span class="text-electric-ocean font-medium underline underline-offset-4 decoration-electric-ocean/30 hover:decoration-electric-ocean transition-all">browse files</span> from your computer</p>
+<div class="flex gap-4 mt-6">
+<span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">PDF up to 50MB</span>
+<span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">Max 100 pages</span>
+</div>
+</div>
+<!-- Queue List -->
+<div class="w-full max-w-container-max flex flex-col gap-4 mb-20">
+<div class="flex justify-between items-center px-4">
+<h3 class="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider">Active Queue (4)</h3>
+<button class="font-label-sm text-label-sm text-electric-ocean hover:underline underline-offset-4">Clear Completed</button>
+</div>
+<!-- Mock Queue Items for UI review -->
+<queue-item item-state="'processing'"></queue-item>
+<queue-item item-state="'uploading'"></queue-item>
+<queue-item item-state="'success'"></queue-item>
+<queue-item item-state="'failed'"></queue-item>
+</div>
+</main>
