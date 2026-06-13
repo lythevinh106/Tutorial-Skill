@@ -1,0 +1,7 @@
+name: Tutorial Workflow
+description: Quy trình mẫu cho Tutorial Skill
+steps:
+  - name: Xin chào
+    command: echo "Bắt đầu workflow tutorial!"
+  - name: Kiểm tra cấu trúc
+    command: ls -la .agents/
