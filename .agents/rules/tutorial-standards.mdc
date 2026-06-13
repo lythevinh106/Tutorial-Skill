@@ -1,0 +1,8 @@
+---
+description: Quy tắc tiêu chuẩn cho dự án Tutorial
+globs: *.*
+---
+# Tutorial Standards
+
+- Đây là dự án thực hành, nên mọi file code cần có comments giải thích rõ ràng.
+- Giữ logic đơn giản, dễ đọc cho người mới.
