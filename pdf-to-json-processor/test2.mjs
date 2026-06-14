@@ -1,0 +1,1 @@
+import MarkdownIt from 'markdown-it'; import markPlugin from 'markdown-it-mark'; const md = new MarkdownIt({html: true}).use(markPlugin); console.log(md.render('<table><tr><th>==Order No==</th></tr></table>'));  

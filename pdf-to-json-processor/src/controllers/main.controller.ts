@@ -1,10 +1,16 @@
+import type { QueueService } from '../services/queue.service';
+import type { PdfItem } from '../models';
+
 export class MainController implements ng.IController {
-    static $inject = [];
+    static $inject = ['QueueService'];
     
     public currentView: 'markdown' | 'json';
+    public QueueService: QueueService;
+    public selectedItem: PdfItem | null = null;
 
-    constructor() {
-        // Mặc định khởi tạo view
+    constructor(QueueService: QueueService) {
+        this.QueueService = QueueService;
+        // Mặc định khởi tạo view ưu tiên 1: markdown
         this.currentView = 'markdown';
     }
 
@@ -14,5 +20,9 @@ export class MainController implements ng.IController {
 
     public switchView(view: 'markdown' | 'json'): void {
         this.currentView = view;
+    }
+
+    public selectItem(item: PdfItem): void {
+        this.selectedItem = item;
     }
 }

@@ -1,0 +1,95 @@
+<style>
+.capture-modal-window .modal-dialog {
+    max-width: 96vw !important;
+    width: 96vw !important;
+    height: 96vh !important;
+    margin: 2vh auto !important;
+}
+.capture-modal-window .modal-content {
+    height: 100% !important;
+    border-radius: 40px !important;
+    background: transparent !important;
+    border: none !important;
+}
+</style>
+<div class="bg-charcoal-ink/80 backdrop-blur-3xl border border-white/20 rounded-[40px] shadow-[0_32px_64px_rgba(0,0,0,0.5)] w-full flex flex-col overflow-hidden animate-[fadeIn_0.3s_ease-out] relative z-10 m-0 mx-auto" style="height: 96vh;">
+    <div class="absolute inset-0 z-[-1] opacity-60 bg-cover bg-center pointer-events-none" style="background-image: url('assets/images/capture-bg.png');"></div>
+
+    <!-- Modal Header - Capture Toolbar -->
+    <div class="px-6 py-4 flex justify-between items-center relative z-10">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-background-twilight-start to-background-twilight-end flex items-center justify-center text-white font-bold font-display-lg-mobile text-sm shadow-lg">TP</div>
+                <div>
+                    <h2 class="font-headline-md text-white text-base font-medium leading-tight">Capture Preview</h2>
+                    <p class="font-body-md text-white/60 text-xs">Artistic Screen Capture</p>
+                </div>
+            </div>
+        </div>
+        <button ng-click="$ctrl.close()" aria-label="Close modal" class="p-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-colors shadow-lg outline-none focus:outline-none">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+    </div>
+
+    <!-- Modal Content - Preview Area -->
+    <div class="flex-1 overflow-hidden px-4 pb-2 flex justify-center items-center relative z-10">
+        <!-- Floating glass card -->
+        <div class="w-full h-full rounded-[24px] overflow-hidden flex bg-white/95 backdrop-blur-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] border border-white/40 p-2 relative mx-auto" style="max-width: 98%;">
+            <div class="flex-1 bg-surface-container-lowest flex items-center justify-center border border-whisper-border relative rounded-xl overflow-hidden cursor-grab select-none"
+                 ng-class="{'cursor-grabbing': $ctrl.isDragging}"
+                 ng-mousedown="$ctrl.startDrag($event)"
+                 ng-mousemove="$ctrl.onDrag($event)"
+                 ng-mouseup="$ctrl.stopDrag()"
+                 ng-mouseleave="$ctrl.stopDrag()"
+                 style="perspective: 1000px;">
+                <img alt="Capture Preview" 
+                     class="max-w-full max-h-full object-contain rounded-xl shadow-sm" 
+                     ng-class="{'transition-transform duration-300 ease-out': !$ctrl.isDragging}"
+                     ng-src="{{$ctrl.imageUrl}}" 
+                     ng-style="{ transform: 'translate(' + $ctrl.translateX + 'px, ' + $ctrl.translateY + 'px) scale(' + $ctrl.scale + ') rotate(' + $ctrl.rotation + 'deg)' }"
+                     draggable="false" />
+                <div class="absolute bottom-4 left-4 flex items-center gap-2 opacity-60 text-muted-steel bg-white/80 px-2 py-1 rounded-full backdrop-blur-md z-20 pointer-events-none">
+                    <span class="material-symbols-outlined text-[14px]">image</span>
+                    <span class="font-label-sm text-xs">Workspace Capture</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Footer - Actions -->
+    <div class="px-6 py-4 flex justify-between items-center relative z-10 mt-auto border-t border-white/10">
+        <button ng-click="$ctrl.copyToClipboard()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white font-label-sm text-xs transition-all shadow-lg hover:-translate-y-[1px] outline-none focus:outline-none">
+            <span class="material-symbols-outlined text-[16px]">content_copy</span>
+            Copy to Clipboard
+        </button>
+        
+        <div class="flex items-center gap-2 bg-white/5 p-1 rounded-full border border-white/10">
+            <button ng-click="$ctrl.zoomOut()" class="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors outline-none focus:outline-none" title="Zoom Out">
+                <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+            </button>
+            <div class="w-[1px] h-4 bg-white/20"></div>
+            <button ng-click="$ctrl.zoomIn()" class="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors outline-none focus:outline-none" title="Zoom In">
+                <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+            </button>
+            <div class="w-[1px] h-4 bg-white/20"></div>
+            <button ng-click="$ctrl.rotate()" class="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors outline-none focus:outline-none" title="Rotate 90°">
+                <span class="material-symbols-outlined text-[18px]">rotate_right</span>
+            </button>
+        </div>
+
+        <div class="flex flex-wrap justify-end gap-3">
+            <button ng-click="$ctrl.export('png')" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white font-label-sm text-xs transition-all shadow-lg hover:-translate-y-[1px] outline-none focus:outline-none">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">image</span>
+                PNG
+            </button>
+            <button ng-click="$ctrl.export('jpeg')" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white font-label-sm text-xs transition-all shadow-lg hover:-translate-y-[1px] outline-none focus:outline-none">
+                <span class="material-symbols-outlined text-[16px]">photo</span>
+                JPEG
+            </button>
+            <button ng-click="$ctrl.export('svg')" class="flex items-center gap-2 px-5 py-2 rounded-full bg-electric-ocean border border-electric-ocean hover:bg-primary text-white font-label-sm text-xs font-semibold transition-all shadow-[0_4px_12px_rgba(37,99,235,0.4)] hover:-translate-y-[1px] outline-none focus:outline-none">
+                <span class="material-symbols-outlined text-[16px]">download</span>
+                Export SVG
+            </button>
+        </div>
+    </div>
+</div>

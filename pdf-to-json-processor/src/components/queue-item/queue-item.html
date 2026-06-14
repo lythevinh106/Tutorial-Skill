@@ -1,169 +1,106 @@
 <!-- Queue Item: Processing -->
-<div ng-if="$ctrl.itemState === 'processing'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-<div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-electric-ocean">picture_as_pdf</span>
-</div>
-<div class="flex-1 flex flex-col gap-2 min-w-0">
-<div class="flex justify-between items-baseline">
-<span class="font-code-md text-code-md text-charcoal-ink truncate pr-4">Q3_Financial_Report_2023.pdf</span>
-<span class="font-label-sm text-label-sm text-electric-ocean flex-shrink-0">Processing 65%</span>
-</div>
-<div class="w-full h-2 bg-white/50 rounded-full overflow-hidden">
-<div class="h-full bg-electric-ocean rounded-full w-[65%] relative">
-<div class="absolute inset-0 skeleton-shimmer"></div>
-</div>
-</div>
-<div class="flex justify-between items-center mt-1">
-<span class="font-label-sm text-label-sm text-muted-steel">4.2 MB • 24 Pages</span>
-<span class="font-label-sm text-label-sm text-muted-steel">Extracting Tables...</span>
-</div>
-</div>
-<button class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start">
-<span class="material-symbols-outlined">close</span>
-</button>
+<div ng-if="$ctrl.item.status === 'processing'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+    <div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-electric-ocean">picture_as_pdf</span>
+    </div>
+    <div class="flex-1 flex flex-col gap-2 min-w-0">
+        <div class="flex justify-between items-baseline">
+            <span class="font-code-md text-code-md text-charcoal-ink truncate pr-4">{{$ctrl.item.name}}</span>
+            <span class="font-label-sm text-label-sm text-electric-ocean flex-shrink-0">Processing {{$ctrl.roundedProgress}}%</span>
+        </div>
+        <div class="w-full h-2 bg-white/50 rounded-full overflow-hidden">
+            <div class="h-full bg-electric-ocean rounded-full relative" ng-style="{ width: $ctrl.roundedProgress + '%' }">
+                <div class="absolute inset-0 skeleton-shimmer"></div>
+            </div>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+            <span class="font-label-sm text-label-sm text-muted-steel">{{$ctrl.item.fileSizeStr}}</span>
+            <span class="font-label-sm text-label-sm text-muted-steel">Parsing Document...</span>
+        </div>
+    </div>
+    <button ng-click="$ctrl.onDelete()" class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start z-10 relative">
+        <span class="material-symbols-outlined">close</span>
+    </button>
 </div>
 
 <!-- Queue Item: Uploading -->
-<div ng-if="$ctrl.itemState === 'uploading'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
-<div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-secondary">description</span>
-</div>
-<div class="flex-1 flex flex-col gap-2 min-w-0">
-<div class="flex justify-between items-baseline">
-<span class="font-code-md text-code-md text-charcoal-ink truncate pr-4">Invoice_Batch_1142.pdf</span>
-<span class="font-label-sm text-label-sm text-secondary flex-shrink-0">Uploading 32%</span>
-</div>
-<div class="w-full h-2 bg-white/50 rounded-full overflow-hidden">
-<div class="h-full bg-secondary rounded-full w-[32%] transition-all duration-300"></div>
-</div>
-<div class="flex justify-between items-center mt-1">
-<span class="font-label-sm text-label-sm text-muted-steel">12.8 MB</span>
-<span class="font-label-sm text-label-sm text-muted-steel">1.2 MB/s</span>
-</div>
-</div>
-<button class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start">
-<span class="material-symbols-outlined">close</span>
-</button>
+<div ng-if="$ctrl.item.status === 'uploading'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-secondary">description</span>
+    </div>
+    <div class="flex-1 flex flex-col gap-2 min-w-0">
+        <div class="flex justify-between items-baseline">
+            <span class="font-code-md text-code-md text-charcoal-ink truncate pr-4">{{$ctrl.item.name}}</span>
+            <span class="font-label-sm text-label-sm text-secondary flex-shrink-0">Uploading {{$ctrl.roundedProgress}}%</span>
+        </div>
+        <div class="w-full h-2 bg-white/50 rounded-full overflow-hidden">
+            <div class="h-full bg-secondary rounded-full transition-all duration-300" ng-style="{ width: $ctrl.roundedProgress + '%' }"></div>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+            <span class="font-label-sm text-label-sm text-muted-steel">{{$ctrl.item.fileSizeStr}}</span>
+        </div>
+    </div>
+    <button ng-click="$ctrl.onDelete()" class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start z-10 relative">
+        <span class="material-symbols-outlined">close</span>
+    </button>
 </div>
 
 <!-- Queue Item: Failed -->
-<div ng-if="$ctrl.itemState === 'failed'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
-<div class="w-12 h-12 rounded-lg bg-error/10 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-error">error</span>
-</div>
-<div class="flex-1 flex flex-col justify-center min-w-0">
-<div class="flex justify-between items-center">
-<span class="font-code-md text-code-md text-charcoal-ink truncate pr-4">Corrupted_Scan_001.pdf</span>
-<span class="font-label-sm text-label-sm text-error bg-error/10 px-2 py-1 rounded flex-shrink-0">Failed</span>
-</div>
-<div class="flex justify-between items-center mt-2">
-<span class="font-label-sm text-label-sm text-muted-steel">Unknown Size</span>
-<button class="font-label-sm text-label-sm text-charcoal-ink hover:underline underline-offset-4 flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">refresh</span> Retry
-</button>
-</div>
-</div>
-<button class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start"><span class="material-symbols-outlined">close</span></button>
+<div ng-if="$ctrl.item.status === 'error'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="w-12 h-12 rounded-lg bg-error/10 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-error">error</span>
+    </div>
+    <div class="flex-1 flex flex-col justify-center min-w-0">
+        <div class="flex justify-between items-center">
+            <span class="font-code-md text-code-md text-charcoal-ink truncate pr-4" title="{{$ctrl.item.errorMessage}}">{{$ctrl.item.name}}</span>
+            <span class="font-label-sm text-label-sm text-error bg-error/10 px-2 py-1 rounded flex-shrink-0">Failed</span>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+            <span class="font-label-sm text-label-sm text-muted-steel">{{$ctrl.item.fileSizeStr}}</span>
+            <button ng-click="$ctrl.onRetry()" class="font-label-sm text-label-sm text-charcoal-ink hover:underline underline-offset-4 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">refresh</span> Retry
+            </button>
+        </div>
+    </div>
+    <button ng-click="$ctrl.onDelete()" class="p-2 text-muted-steel hover:text-error transition-colors flex-shrink-0 rounded-full hover:bg-white/40 self-start z-10 relative">
+        <span class="material-symbols-outlined">close</span>
+    </button>
 </div>
 
 <!-- Queue Item: Success (Expanded) -->
-<div ng-if="$ctrl.itemState === 'success'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
-<div class="flex-1 flex flex-col justify-center min-w-0">
-<div class="flex flex-col gap-4 mt-4 w-full">
-<div class="w-full rounded-[24px] overflow-hidden border border-white/40 shadow-lg bg-white/60 backdrop-blur-xl p-6 relative">
-<button class="absolute top-4 right-4 p-2 text-muted-steel hover:text-error transition-colors rounded-full hover:bg-white/20 z-10"><span class="material-symbols-outlined">close</span></button>
-<div class="flex flex-col md:flex-row min-h-[800px] gap-0">
-<!-- Left Side: High-Fidelity PDF Preview (Expanded) -->
-<div class="flex-1 rounded-xl border-whisper-border shadow-sm overflow-hidden flex flex-col">
-<div class="p-4 border-whisper-border flex justify-between items-center">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-muted-steel">description</span>
-<div class="flex flex-col">
-<span class="text-[12px] font-bold text-charcoal-ink">invoice_INV-2023-084.pdf</span>
-<span class="text-[10px] text-muted-steel">2.4 MB • Uploaded 2 mins ago</span>
-</div>
-</div>
-<div class="flex gap-2">
-<span class="material-symbols-outlined text-muted-steel text-[18px] cursor-pointer">zoom_in</span>
-<span class="material-symbols-outlined text-muted-steel text-[18px] cursor-pointer">search</span>
-</div>
-</div>
-<div class="flex-1 p-12 overflow-y-auto custom-scrollbar">
-<div class="mx-auto flex flex-col gap-12 max-w-3xl">
-<div class="flex justify-between items-start">
-<div class="flex flex-col gap-1">
-<h4 class="text-[32px] font-bold tracking-tight">INVOICE</h4>
-<p class="text-[16px] text-muted-steel">INV-2023-084</p>
-</div>
-<div class="text-right">
-<div class="w-12 h-12 bg-surface-variant rounded ml-auto mb-2"></div>
-<p class="text-[16px] font-bold">Acme Corp</p>
-<p class="text-[14px] text-muted-steel">123 Business Rd.<br>Tech City, TC 90210</p>
-</div>
-</div>
-<div class="flex justify-between text-[14px]">
-<div>
-<p class="text-muted-steel mb-1">Bill To:</p>
-<p class="font-bold text-[16px]">Jane Doe</p>
-<p class="text-muted-steel">Startups Inc.</p>
-<p class="text-muted-steel">456 Innovation Ave.</p>
-</div>
-<div class="text-right">
-<p class="text-muted-steel mb-1">Date: <span class="text-charcoal-ink font-medium">Oct 24, 2023</span></p>
-<p class="text-muted-steel">Due: <span class="text-charcoal-ink font-medium">Nov 24, 2023</span></p>
-</div>
-</div>
-<table class="w-full text-[14px]">
-<thead>
-<tr class="border-b border-outline-variant/30 text-left text-muted-steel">
-<th class="py-4 font-medium">Description</th>
-<th class="py-4 text-center font-medium">Qty</th>
-<th class="py-4 text-right font-medium">Price</th>
-<th class="py-4 text-right font-medium">Total</th>
-</tr>
-</thead>
-<tbody class="text-charcoal-ink">
-<tr class="border-b border-outline-variant/10">
-<td class="py-6">UI/UX Design Services</td>
-<td class="py-6 text-center">40</td>
-<td class="py-6 text-right">$120</td>
-<td class="py-6 text-right font-medium">$4,800</td>
-</tr>
-<tr>
-<td class="py-6">Frontend Development</td>
-<td class="py-6 text-center">80</td>
-<td class="py-6 text-right">$150</td>
-<td class="py-6 text-right font-medium">$12,000</td>
-</tr>
-</tbody>
-</table>
-<div class="mt-auto pt-8 border-t border-outline-variant/30 flex flex-col gap-3">
-<div class="flex justify-between text-[15px]">
-<span class="text-muted-steel">Subtotal:</span>
-<span class="font-medium">$16,800.00</span>
-</div>
-<div class="flex justify-between text-[15px]">
-<span class="text-muted-steel">Tax (8%):</span>
-<span class="font-medium">$1,344.00</span>
-</div>
-<div class="flex justify-between items-center pt-4">
-<span class="text-[24px] font-bold">Total:</span>
-<span class="text-[24px] font-bold text-electric-ocean">$18,144.00</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Side: High-Fidelity JSON Editor (Expanded) -->
-<div class="flex-1 border-l border-white/20 bg-white/20 backdrop-blur-sm overflow-hidden flex flex-col font-code-md">
-<div class="p-4 border-whisper-border flex justify-between items-center">
-<div class="flex items-center gap-3"><span class="material-symbols-outlined text-electric-ocean">markdown</span><div class="flex flex-col"><span class="text-[12px] font-bold text-charcoal-ink">Markdown Preview</span><span class="text-[10px] text-muted-steel">Schema: Invoice v2.1 • 100% Confidence</span></div></div>
-<button class="bg-white border border-outline-variant/30 px-3 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[14px]">content_copy</span> Copy Markdown</button>
-</div>
-<div class="flex-1 p-8 overflow-y-auto custom-scrollbar font-code-md text-[15px] leading-relaxed"><div class="flex flex-col gap-6 text-charcoal-ink" style="font-family: Satoshi, sans-serif; line-height: 1.6;"><div class="border-b border-outline-variant/30 pb-4"><h1 class="text-[28px] font-bold tracking-tight">Invoice: INV-2023-084</h1><p class="text-muted-steel">Document Type: Invoice</p></div><div class="grid grid-cols-2 gap-8"><div class="flex flex-col gap-2"><h2 class="text-[14px] font-bold uppercase tracking-wider text-muted-steel">Vendor</h2><p class="font-bold">Acme Corp</p><p class="text-[14px]">123 Business Rd.<br>Tech City, TC 90210</p></div><div class="flex flex-col gap-2"><h2 class="text-[14px] font-bold uppercase tracking-wider text-muted-steel">Client</h2><p class="font-bold">Jane Doe</p><p class="text-[14px]">Startups Inc.<br>456 Innovation Ave.</p></div></div><div class="flex flex-col gap-4"><h2 class="text-[18px] font-bold border-b border-outline-variant/10 pb-2">Line Items</h2><ul class="flex flex-col gap-4"><li class="flex justify-between items-start bg-white/30 p-4 rounded-lg border border-white/40"><div class="flex flex-col"><strong>UI/UX Design Services</strong><span class="text-[13px] text-muted-steel">Quantity: 40 @ $120.00</span></div><div class="text-right font-bold">$4,800.00</div></li><li class="flex justify-between items-start bg-white/30 p-4 rounded-lg border border-white/40"><div class="flex flex-col"><strong>Frontend Development</strong><span class="text-[13px] text-muted-steel">Quantity: 80 @ $150.00</span></div><div class="text-right font-bold">$12,000.00</div></li></ul></div><div class="mt-4 pt-6 border-t-2 border-charcoal-ink/10 flex flex-col gap-2"><div class="flex justify-between"><span class="">Subtotal</span><span class="font-medium">$16,800.00</span></div><div class="flex justify-between"><span class="">Tax (8%)</span><span class="font-medium">$1,344.00</span></div><div class="flex justify-between text-[20px] font-bold mt-2"><span class="">Total Amount</span><span class="text-electric-ocean">$18,144.00</span></div></div></div></div>
-<div class="p-4 bg-white/50 border-t border-whisper-border flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-[#10B981]"></div><span class="text-[11px] font-medium text-muted-steel">Parsing Complete</span></div><button class="bg-electric-ocean text-white rounded-full px-6 py-2 font-label-sm text-label-sm flex items-center gap-2 hover:opacity-90 transition-opacity"><span class="material-symbols-outlined text-[18px]">send</span> Send to Webhook</button></div>
-</div>
-</div>
-</div>
-</div>
+<div ng-if="$ctrl.item.status === 'success'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="flex-1 flex flex-col justify-center min-w-0">
+        <div class="flex flex-col gap-4 mt-4 w-full">
+            <div class="w-full rounded-[24px] overflow-hidden border border-white/40 shadow-lg bg-white/60 backdrop-blur-xl p-6 relative">
+                <button ng-click="$ctrl.onDelete()" class="absolute top-4 right-4 p-2 text-muted-steel hover:text-error transition-colors rounded-full hover:bg-white/20 z-10">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="flex flex-col md:flex-row min-h-[800px] gap-0 capture-zone">
+                    <!-- Left Side: High-Fidelity PDF Preview -->
+                    <div class="flex-1 rounded-xl border-whisper-border shadow-sm overflow-hidden flex flex-col relative bg-white">
+                        <div class="p-4 border-whisper-border flex justify-between items-center z-10 bg-white/80 backdrop-blur-sm shadow-sm relative">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-muted-steel">description</span>
+                                <div class="flex flex-col">
+                                    <span class="text-[12px] font-bold text-charcoal-ink">{{$ctrl.item.name}}</span>
+                                    <span class="text-[10px] text-muted-steel">{{$ctrl.item.fileSizeStr}}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button ng-click="$ctrl.openModal()" class="p-1 rounded text-muted-steel hover:bg-white hover:shadow-sm transition-all text-electric-ocean"><span class="material-symbols-outlined text-[18px]">fullscreen</span></button>
+                                <button class="p-1 rounded text-muted-steel hover:bg-white hover:shadow-sm transition-all"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-hidden bg-white flex flex-col relative">
+                            <screen-pdf item="$ctrl.item" class="h-full w-full block"></screen-pdf>
+                        </div>
+                    </div>
+                    <!-- Right Side: Markdown View -->
+                    <div class="flex-1 border-l border-white/20 bg-white/20 backdrop-blur-sm overflow-hidden flex flex-col font-code-md">
+                        <screen-markdown item="$ctrl.item" class="h-full flex flex-col"></screen-markdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

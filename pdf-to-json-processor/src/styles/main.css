@@ -8,6 +8,148 @@
     background-attachment: fixed;
     min-height: 100vh;
   }
+  
+  mark {
+    background-color: #fde047; /* Tailwind yellow-300 */
+    color: inherit;
+    padding: 0.125em 0.25em;
+    border-radius: 0.25em;
+    font-weight: 500;
+  }
+  
+  mark.red-mark {
+    background-color: #ef4444; /* Tailwind red-500 */
+    color: white;
+  }
+}
+
+/* UI Bootstrap Minimal Modal Overrides */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  outline: 0;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Custom Toaster overrides for Glassmorphism */
+#toast-container > div {
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  opacity: 1 !important;
+  margin-top: 0.75rem !important;
+  transition: all 0.2s ease !important;
+}
+
+#toast-container > div:hover {
+  transform: scale(1.02) !important;
+}
+
+#toast-container > .toast-success {
+  background-color: #10B981 !important;
+  color: white !important;
+}
+
+#toast-container > .toast-warning {
+  background-color: #F59E0B !important;
+  color: white !important;
+}
+
+#toast-container > .toast-error {
+  background-color: #EF4444 !important;
+  color: white !important;
+}
+
+#toast-container > div .toast-message {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+}
+
+#toast-container > div .toast-progress {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  height: 4px !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Animations for Toaster */
+#toast-container > div.ng-enter {
+  animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards !important;
+}
+
+#toast-container > div.ng-leave {
+  animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards !important;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Fix UI Bootstrap Modal backdrop sticking with ngAnimate */
+.modal-backdrop.ng-leave {
+  transition: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    padding: 2rem;
+  }
+}
+
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  max-height: 921px;
+  pointer-events: none;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  outline: 0;
 }
 
 @layer components {
@@ -60,4 +202,28 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(15, 23, 42, 0.4);
   }
+
+  /* Override Tailwind Typography Table Styles for full borders */
+  .prose table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  .prose thead {
+    background-color: #f8fafc;
+  }
+  .prose th,
+  .prose td {
+    border: 1px solid #cbd5e1 !important; /* slate-300 */
+    padding: 0.75rem !important;
+  }
+  .prose th {
+    font-weight: 600;
+    color: #1e293b;
+  }
 }
+
+.capture-modal-window .modal-dialog { max-width: 95vw !important; width: 95vw !important; margin: 2vh auto !important; height: 96vh !important; }
+.capture-modal-window .modal-content { height: 100%; border-radius: 40px; background: transparent; border: none; }
+

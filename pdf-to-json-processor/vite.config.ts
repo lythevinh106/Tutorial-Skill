@@ -12,5 +12,14 @@ export default defineConfig({
       cache: false,
       include: ['**/*.ts']
     })
-  ]
+  ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://192.168.100.117:30134',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
 });

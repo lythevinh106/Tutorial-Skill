@@ -6,12 +6,53 @@
     <title>Twilight Parser - Queue Management</title>
     
     <!-- Fonts and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;450;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;450;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6D5CE6 0%, #FFA0B4 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        .upload-pulse {
+            animation: pulse-border 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: rgba(255, 255, 255, 0.4); }
+            50% { border-color: rgba(37, 99, 235, 0.6); }
+            100% { border-color: rgba(255, 255, 255, 0.4); }
+        }
+
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 25%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                rgba(255, 255, 255, 0.1) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .upload-zone:hover {
+            border-color: #2563EB;
+            background-color: rgba(255, 255, 255, 0.75);
+            transition: all 0.3s ease;
+        }
+    </style>
   </head>
-  <body class="text-charcoal-ink font-body-md antialiased overflow-x-hidden" ng-controller="MainController as $ctrl">
+  <body class="text-charcoal-ink font-body-md antialiased overflow-x-hidden min-h-screen relative" style="background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop') center center / cover no-repeat fixed;" ng-controller="MainController as $ctrl">
+    <div class="fixed inset-0 bg-white/20 backdrop-blur-[2px] z-[-1]"></div>
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button': true, 'time-out': 3000, 'progress-bar': true, 'animation-class': 'toast-top-right', 'tap-to-dismiss': true}"></toaster-container>
     
     <navbar></navbar>
+    
     <queue-dashboard></queue-dashboard>
 
     <!-- Entry point for Vite -->

@@ -1,0 +1,23 @@
+<div class="flex flex-col border-r border-whisper-border relative h-full w-full">
+    <div class="flex items-center justify-end gap-2 p-3 absolute top-0 right-0 z-10 w-full bg-gradient-to-b from-white/50 to-transparent">
+        <span class="text-xs font-mono bg-white/70 px-2 py-1 rounded shadow-sm mr-2 text-charcoal-ink">{{$ctrl.zoomPercent}}%</span>
+        <button ng-click="$ctrl.zoomIn()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/60 hover:bg-white shadow-sm transition-colors text-muted-steel"><span class="material-symbols-outlined text-[20px]" data-icon="zoom_in">zoom_in</span></button>
+        <button ng-click="$ctrl.zoomOut()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/60 hover:bg-white shadow-sm transition-colors text-muted-steel"><span class="material-symbols-outlined text-[20px]" data-icon="zoom_out">zoom_out</span></button>
+        <button ng-click="$ctrl.rotate()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/60 hover:bg-white shadow-sm transition-colors text-muted-steel"><span class="material-symbols-outlined text-[20px]">rotate_right</span></button>
+    </div>
+    
+    <div id="{{$ctrl.scrollContainerId}}" class="flex-grow overflow-auto custom-scrollbar p-6 bg-surface-container-low/50 flex flex-col items-center justify-start gap-4">
+        <!-- Loader -->
+        <div ng-if="!$ctrl.pdfRendered" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-electric-ocean mb-2"></div>
+            <span class="text-xs text-muted-steel font-code-md">{{$ctrl.debugMsg || 'Rendering PDF...'}}</span>
+        </div>
+        
+        <!-- PDF Canvases -->
+        <canvas 
+            ng-repeat="pageNum in $ctrl.pages track by $index" 
+            id="pdf-viewer-{{$ctrl.scrollContainerId}}-{{pageNum}}"
+            class="shadow-lg transition-transform duration-300 origin-center mx-auto shrink-0 bg-white">
+        </canvas>
+    </div>
+</div>

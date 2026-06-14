@@ -1,31 +1,50 @@
-<main class="w-full max-w-container-max mx-auto px-gutter py-panel-padding flex flex-col gap-8 items-center justify-start min-h-[calc(100vh-80px)]">
-<!-- Header Section -->
-<div class="w-full max-w-4xl flex flex-col gap-2 items-center text-center mt-8">
-<h1 class="font-display-lg text-display-lg text-charcoal-ink">Document Queue</h1>
-<p class="font-body-lg text-body-lg text-muted-steel max-w-2xl">Upload PDF files for structural parsing and JSON conversion. Our AI-driven engine processes complex tables and hierarchical data in seconds.</p>
-</div>
-<!-- Upload Zone -->
-<div class="w-full max-w-4xl bg-frosted-surface backdrop-blur-2xl rounded-[24px] border-2 border-dashed border-whisper-border upload-pulse upload-zone p-12 flex flex-col items-center justify-center gap-4 shadow-[0_8px_32px_rgba(0,0,0,0.08)] cursor-pointer group">
-<div class="w-20 h-20 rounded-full bg-white/40 flex items-center justify-center mb-4 group-hover:bg-electric-ocean/10 transition-colors">
-<span class="material-symbols-outlined text-[40px] text-electric-ocean" style="font-variation-settings: &quot;FILL&quot; 1;">cloud_upload</span>
-</div>
-<h2 class="font-headline-md text-headline-md text-charcoal-ink text-center">Drag &amp; Drop Documents</h2>
-<p class="font-body-md text-body-md text-muted-steel text-center">or <span class="text-electric-ocean font-medium underline underline-offset-4 decoration-electric-ocean/30 hover:decoration-electric-ocean transition-all">browse files</span> from your computer</p>
-<div class="flex gap-4 mt-6">
-<span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">PDF up to 50MB</span>
-<span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">Max 100 pages</span>
-</div>
-</div>
-<!-- Queue List -->
-<div class="w-full max-w-container-max flex flex-col gap-4 mb-20">
-<div class="flex justify-between items-center px-4">
-<h3 class="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider">Active Queue (4)</h3>
-<button class="font-label-sm text-label-sm text-electric-ocean hover:underline underline-offset-4">Clear Completed</button>
-</div>
-<!-- Mock Queue Items for UI review -->
-<queue-item item-state="'processing'"></queue-item>
-<queue-item item-state="'uploading'"></queue-item>
-<queue-item item-state="'success'"></queue-item>
-<queue-item item-state="'failed'"></queue-item>
-</div>
+<main class="w-full min-w-[95%] max-w-[95%] mx-auto px-gutter py-panel-padding flex flex-col gap-8 items-center justify-start min-h-[calc(100vh-80px)]">
+    <!-- Header Section -->
+    <div class="w-full min-w-[95%] max-w-[95%] flex flex-col gap-2 items-center text-center mt-8">
+        <h1 class="font-display-lg text-display-lg text-charcoal-ink">Document Queue</h1>
+        <p class="font-body-lg text-body-lg text-muted-steel max-w-2xl">Upload PDF files for structural parsing and JSON conversion. Our AI-driven engine processes complex tables and hierarchical data in seconds.</p>
+        <p class="text-charcoal-ink/80 text-[12px] font-medium max-w-2xl mx-auto mt-2 bg-white/40 py-1.5 px-4 rounded-full inline-block backdrop-blur-sm border border-white/60 shadow-sm">
+            💡 <strong>Tip:</strong> In the Raw Markdown tab, select text and press <kbd class="bg-white px-1.5 py-0.5 rounded text-charcoal-ink shadow-sm border border-outline-variant/30 font-mono text-[11px] font-bold">Ctrl+D</kbd> to highlight <span class="bg-[#fde047] text-charcoal-ink px-1 rounded font-bold">yellow</span>, or <kbd class="bg-white px-1.5 py-0.5 rounded text-charcoal-ink shadow-sm border border-outline-variant/30 font-mono text-[11px] font-bold">Ctrl+B</kbd> to highlight <span class="bg-[#ef4444] text-white px-1 rounded font-bold">red</span>.
+        </p>
+    </div>
+    <!-- Upload Zone -->
+    <div file-drop 
+         on-drop="$ctrl.handleFiles(files)" 
+         class="w-full min-w-[95%] max-w-[95%] bg-frosted-surface backdrop-blur-2xl rounded-[24px] border-2 border-dashed border-whisper-border upload-pulse upload-zone p-12 flex flex-col items-center justify-center gap-4 shadow-[0_8px_32px_rgba(0,0,0,0.08)] cursor-pointer group relative overflow-hidden" onclick="document.getElementById('fileUpload').click()">
+        <input type="file" id="fileUpload" multiple class="hidden" accept="application/pdf" />
+        <div class="w-20 h-20 rounded-full bg-white/40 flex items-center justify-center mb-4 group-hover:bg-electric-ocean/10 transition-colors">
+            <span class="material-symbols-outlined text-[40px] text-electric-ocean" style="font-variation-settings: 'FILL' 1;">cloud_upload</span>
+        </div>
+        <h2 class="font-headline-md text-headline-md text-charcoal-ink text-center">Drag &amp; Drop Documents</h2>
+        <p class="font-body-md text-body-md text-muted-steel text-center">or <span class="text-electric-ocean font-medium underline underline-offset-4 decoration-electric-ocean/30 hover:decoration-electric-ocean transition-all">browse files</span> from your computer</p>
+        <div class="flex gap-4 mt-6">
+            <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">PDF up to 50MB</span>
+            <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">Max 100 pages</span>
+        </div>
+        
+        <!-- Split Mode Toggle -->
+        <div class="absolute top-6 right-6 flex items-center gap-3 z-10 bg-white/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/40 shadow-sm" onclick="event.stopPropagation()">
+            <label class="relative inline-flex items-center cursor-pointer mb-0">
+                <input type="checkbox" ng-model="$ctrl.isSplitMode" class="sr-only peer">
+                <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20"></div>
+                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap">Split Page</span>
+            </label>
+        </div>
+    </div>
+    <!-- Queue List -->
+    <div class="w-full min-w-[95%] max-w-[95%] flex flex-col gap-4 mb-20" ng-if="$ctrl.QueueService.items.length > 0">
+        <div class="flex justify-between items-center px-4">
+            <h3 class="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider">Active Queue ({{$ctrl.QueueService.items.length}})</h3>
+            <div class="flex gap-4">
+                <button ng-click="$ctrl.downloadAllCompleted()" class="font-label-sm text-label-sm text-electric-ocean hover:underline underline-offset-4 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">download_for_offline</span> Download All Queue</button>
+                <button ng-click="$ctrl.clearCompleted()" class="font-label-sm text-label-sm text-error hover:underline underline-offset-4 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">delete_sweep</span> Clear Completed</button>
+            </div>
+        </div>
+        <!-- Render Queue Items -->
+        <queue-item ng-repeat="item in $ctrl.QueueService.items track by item.id" 
+                    item="item"
+                    on-delete="$ctrl.deleteItem(item)"
+                    on-retry="$ctrl.QueueService.retry(item)">
+        </queue-item>
+    </div>
 </main>
