@@ -2,7 +2,6 @@ import type { PdfItem } from '../../models';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { db } from '../../services/db';
-import html2canvas from 'html2canvas';
 
 interface IToasterService {
     pop(type: string, title: string, body: string): void;
