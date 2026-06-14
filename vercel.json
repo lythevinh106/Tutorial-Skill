@@ -1,4 +1,6 @@
 {
+  "buildCommand": "cd pdf-to-json-processor && npm install && npm run build",
+  "outputDirectory": "pdf-to-json-processor/dist",
   "rewrites": [
     {
       "source": "/api/:match*",
