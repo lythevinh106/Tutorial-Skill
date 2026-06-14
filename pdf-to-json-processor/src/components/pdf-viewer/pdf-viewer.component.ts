@@ -3,11 +3,13 @@ import * as pdfjsLib from 'pdfjs-dist';
 // Khởi tạo worker qua CDN để tránh lỗi Vite bundling cho Web Workers
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
 
+import template from './pdf-viewer.html?raw';
+
 export const PdfViewerComponent: ng.IComponentOptions = {
     bindings: {
         url: '<'
     },
-    templateUrl: '/components/pdf-viewer/pdf-viewer.html',
+    template,
     controller: class PdfViewerController {
         static $inject = ['$timeout'];
         

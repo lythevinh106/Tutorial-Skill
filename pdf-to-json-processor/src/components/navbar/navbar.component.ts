@@ -1,5 +1,7 @@
+import template from './navbar.html?raw';
+
 export const NavbarComponent: ng.IComponentOptions = {
-    templateUrl: '/components/navbar/navbar.html',
+    template,
     controller: class NavbarController {
         $onInit() {
             // Navbar logic here
