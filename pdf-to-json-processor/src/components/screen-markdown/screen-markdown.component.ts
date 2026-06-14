@@ -22,7 +22,7 @@ const md = new MarkdownIt({
 }).use(hljs).use(markPlugin);
 
 export class ScreenMarkdownController implements ng.IController {
-    static $inject = ['$sce', '$timeout', 'toaster', '$scope', '$uibModal'];
+    static $inject = ['$sce', '$timeout', 'toaster', '$scope', '$uibModal', 'CaptureService'];
     public item!: PdfItem;
     public onDelete?: () => void;
     public onUpdate?: () => void;
@@ -38,13 +38,15 @@ export class ScreenMarkdownController implements ng.IController {
     private toaster: IToasterService;
     private $scope: ng.IScope;
     private $uibModal: angular.ui.bootstrap.IModalService;
+    public CaptureService: import('../../services/capture.service').CaptureService;
 
-    constructor($sce: ng.ISCEService, $timeout: ng.ITimeoutService, toaster: IToasterService, $scope: ng.IScope, $uibModal: angular.ui.bootstrap.IModalService) {
+    constructor($sce: ng.ISCEService, $timeout: ng.ITimeoutService, toaster: IToasterService, $scope: ng.IScope, $uibModal: angular.ui.bootstrap.IModalService, CaptureService: import('../../services/capture.service').CaptureService) {
         this.$sce = $sce;
         this.$timeout = $timeout;
         this.toaster = toaster;
         this.$scope = $scope;
         this.$uibModal = $uibModal;
+        this.CaptureService = CaptureService;
     }
 
     public $onInit() {
@@ -183,24 +185,12 @@ export class ScreenMarkdownController implements ng.IController {
 
             folder.file(`${folderName}.md`, this.item.markdownData);
 
-            // Capture the on-screen element directly
-            const captureZone = document.getElementById(`capture-zone-${this.item.id}`);
-            if (captureZone) {
-                try {
-                    const canvasObj = await html2canvas(captureZone, {
-                        useCORS: true,
-                        allowTaint: true,
-                        scale: 1,
-                        logging: false,
-                        backgroundColor: '#ffffff'
-                    });
-                    const pngBlob = await new Promise<Blob | null>(res => canvasObj.toBlob(res, 'image/png'));
-                    if (pngBlob) {
-                        folder.file(`${folderName}-capture.png`, pngBlob);
-                    }
-                } catch (e) {
-                    console.error("Failed to capture PNG:", e);
-                }
+            try {
+                this.toaster.pop('info', '', `Generating screen capture...`);
+                const pngBlob = await this.CaptureService.captureOffscreen(this.item);
+                folder.file(`${folderName}-capture.png`, pngBlob);
+            } catch (e) {
+                console.error("Failed to capture PNG:", e);
             }
 
             const content = await zip.generateAsync({ type: 'blob' });

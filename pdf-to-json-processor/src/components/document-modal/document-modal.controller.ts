@@ -9,16 +9,18 @@ interface IToasterService {
 }
 
 export class DocumentModalController {
-    static $inject = ['$uibModalInstance', 'item', 'toaster'];
+    static $inject = ['$uibModalInstance', 'item', 'toaster', 'CaptureService'];
     item: PdfItem;
     originalMarkdown: string;
     private $uibModalInstance: angular.ui.bootstrap.IModalInstanceService;
     private toaster: IToasterService;
+    private CaptureService: import('../../services/capture.service').CaptureService;
 
-    constructor($uibModalInstance: angular.ui.bootstrap.IModalInstanceService, item: PdfItem, toaster: IToasterService) {
+    constructor($uibModalInstance: angular.ui.bootstrap.IModalInstanceService, item: PdfItem, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
         this.$uibModalInstance = $uibModalInstance;
         this.item = item;
         this.toaster = toaster;
+        this.CaptureService = CaptureService;
         this.originalMarkdown = item.markdownData || '';
     }
 
@@ -53,24 +55,12 @@ export class DocumentModalController {
 
             folder.file(`${folderName}.md`, this.item.markdownData);
 
-            // Capture the on-screen element directly
-            const captureZone = document.getElementById(`capture-zone-${this.item.id}`);
-            if (captureZone) {
-                try {
-                    const canvasObj = await html2canvas(captureZone, {
-                        useCORS: true,
-                        allowTaint: true,
-                        scale: 1,
-                        logging: false,
-                        backgroundColor: '#ffffff'
-                    });
-                    const pngBlob = await new Promise<Blob | null>(res => canvasObj.toBlob(res, 'image/png'));
-                    if (pngBlob) {
-                        folder.file(`${folderName}-capture.png`, pngBlob);
-                    }
-                } catch (e) {
-                    console.error("Failed to capture PNG:", e);
-                }
+            try {
+                this.toaster.pop('info', '', `Generating screen capture...`);
+                const pngBlob = await this.CaptureService.captureOffscreen(this.item);
+                folder.file(`${folderName}-capture.png`, pngBlob);
+            } catch (e) {
+                console.error("Failed to capture PNG:", e);
             }
 
             const content = await zip.generateAsync({ type: 'blob' });
