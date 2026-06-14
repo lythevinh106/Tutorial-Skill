@@ -1,7 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { ApiResponse, PdfItem } from '../models';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api/cholimex/ocr';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '/api/cholimex/ocr' : 'http://192.168.100.117:30134/cholimex/ocr');
 
 export class ApiService {
     /**
