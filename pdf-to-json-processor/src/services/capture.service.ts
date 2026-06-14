@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas';
+import { domToBlob } from 'modern-screenshot';
 import type { PdfItem } from '../models';
 
 export class CaptureService {
@@ -52,17 +52,13 @@ export class CaptureService {
                         // Allow DOM to settle
                         await new Promise(r => setTimeout(r, 500));
 
-                        const canvasObj = await html2canvas(container, {
-                            useCORS: true,
-                            allowTaint: true,
+                        const blob = await domToBlob(container, {
                             scale: 1,
-                            logging: false,
                             backgroundColor: '#ffffff',
                             width: 1920,
                             height: 1080
                         });
 
-                        const blob = await new Promise<Blob | null>(res => canvasObj.toBlob(res, 'image/png'));
                         if (blob) {
                             resolve(blob);
                         } else {

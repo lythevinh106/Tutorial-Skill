@@ -6,7 +6,7 @@ export interface PdfItem {
     pdfUrl: string;
     pdfBlob?: Blob;
     markdownData: string; // Chuỗi Markdown thô nhận từ API
-    jsonData: ApiResponse | any; // Cấu trúc Object dữ liệu JSON
+    jsonData: ApiResponse | unknown; // Cấu trúc Object dữ liệu JSON
     status: 'pending' | 'uploading' | 'processing' | 'success' | 'error';
     progress?: number; // Tracks completion percentage (0 - 100)
     fileSizeStr?: string; // e.g. "12.8 MB"

@@ -12,7 +12,7 @@
   mark {
     background-color: #fde047; /* Tailwind yellow-300 */
     color: inherit;
-    padding: 0 0.2em; /* Remove vertical padding to fix html2canvas baseline shift */
+    padding: 0 0.2em; /* Remove vertical padding to fix baseline shift when capturing canvas */
     border-radius: 0.25em;
     font-weight: 500;
   }

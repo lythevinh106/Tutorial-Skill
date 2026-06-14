@@ -1,7 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { ApiResponse, PdfItem } from '../models';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.100.117:30134/cholimex/ocr';
+const API_URL = import.meta.env.VITE_API_URL || '/api/cholimex/ocr';
 
 export class ApiService {
     /**
@@ -16,8 +16,7 @@ export class ApiService {
         try {
             const response: AxiosResponse<ApiResponse> = await axios.post(API_URL, formData, {
                 headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
+                    'accept': 'application/json'
                 },
             });
 

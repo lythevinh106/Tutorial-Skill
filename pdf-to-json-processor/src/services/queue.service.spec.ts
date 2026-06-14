@@ -12,8 +12,13 @@ describe('QueueService', () => {
     beforeEach(() => {
         vi.resetAllMocks();
         
-        // Giả lập $timeout của AngularJS thực thi callback ngay lập tức
-        mockTimeout = vi.fn((fn: () => void) => fn());
+        mockTimeout = vi.fn((fn: () => void, delay?: number) => {
+            if (!delay) {
+                fn();
+            }
+            return 123;
+        });
+        (mockTimeout as any).cancel = vi.fn();
         
         queueService = new QueueService(mockTimeout as any);
         
@@ -39,7 +44,7 @@ describe('QueueService', () => {
 
         // Kiểm tra sau khi enqueue thì phần tử được đưa vào danh sách hiển thị
         expect(queueService.items.length).toBe(2);
-        expect(queueService.items[0].name).toBe('doc2.pdf'); // doc2 được unshift vào nên ở đầu tiên nếu file2 là file thứ 2 trong mảng
+        expect(queueService.items[0].name).toBe('doc1.pdf'); // unshift(...[doc1, doc2]) nên doc1 ở đầu
         
         // Chờ processPromise xử lý xong các file
         await processPromise;

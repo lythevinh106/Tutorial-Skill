@@ -54,8 +54,8 @@ describe('ApiService', () => {
         expect(result.status).toBe('success');
         expect(result.errorMessage).toBeUndefined();
         
-        // Kiểm tra markdownData chỉ lấy từ page đầu tiên (index 0) như đã thống nhất
-        expect(result.markdownData).toBe("# Page 1 Markdown\nHello from page 1.");
+        // Kiểm tra markdownData kết hợp tất cả các trang
+        expect(result.markdownData).toBe("# Page 1 Markdown\nHello from page 1.\n\n---\n\n# Page 2 Markdown\nHello from page 2.");
         
         // Kiểm tra jsonData chứa nguyên vẹn response API
         expect(result.jsonData).toEqual(mockApiResponse.data);

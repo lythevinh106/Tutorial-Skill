@@ -23,5 +23,5 @@ export interface ApiResponse {
     status: string;
     pages: OcrPage[];
     audit: OcrAudit;
-    error: any;
+    error: unknown;
 }

@@ -5,7 +5,7 @@ import type { PdfItem } from '../../models';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { db } from '../../services/db';
-import html2canvas from 'html2canvas';
+import { domToPng } from 'modern-screenshot';
 import { CaptureModalController } from '../capture-modal/capture-modal.controller';
 import captureModalTemplate from '../capture-modal/capture-modal.html?raw';
 // @ts-expect-error missing types for markdown-it-mark
@@ -248,14 +248,10 @@ export class ScreenMarkdownController implements ng.IController {
             // Allow DOM to settle before capturing
             await new Promise(r => setTimeout(r, 100));
             
-            const canvasObj = await html2canvas(node, {
-                useCORS: true,
-                allowTaint: true,
+            const dataUrl = await domToPng(node, {
                 scale: 1,
-                logging: false,
                 backgroundColor: '#ffffff'
             });
-            const dataUrl = canvasObj.toDataURL('image/png');
             
             // Try to copy to clipboard
             try {

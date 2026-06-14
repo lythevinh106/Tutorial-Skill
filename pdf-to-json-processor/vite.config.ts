@@ -1,4 +1,6 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
+// @ts-expect-error vite-plugin-eslint has broken type exports
 import eslintPlugin from 'vite-plugin-eslint';
 
 export default defineConfig({
@@ -21,5 +23,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
+  },
+  // @ts-expect-error test is injected by vitest
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts']
   }
 });
