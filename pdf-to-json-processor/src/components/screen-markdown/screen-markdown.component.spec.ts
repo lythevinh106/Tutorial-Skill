@@ -41,7 +41,7 @@ describe('ScreenMarkdownController', () => {
             captureOffscreen: vi.fn()
         };
         
-        controller = new ScreenMarkdownController(mockSce, mockTimeout, mockToaster, mockScope, mockUibModal, mockCaptureService);
+        controller = new ScreenMarkdownController(mockSce, mockTimeout, mockToaster, mockScope, mockUibModal, mockCaptureService as any);
     });
 
     it('hiển thị lỗi khi status = error', () => {
