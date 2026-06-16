@@ -8,19 +8,21 @@ interface IToasterService {
 }
 
 export class DocumentModalController {
-    static $inject = ['$uibModalInstance', 'item', 'toaster', 'CaptureService'];
+    static $inject = ['$uibModalInstance', 'item', 'toaster', 'CaptureService', '$timeout'];
     item: PdfItem;
     originalMarkdown: string;
     public isDownloading: boolean = false;
     private $uibModalInstance: angular.ui.bootstrap.IModalInstanceService;
+    private $timeout: ng.ITimeoutService;
     private toaster: IToasterService;
     private CaptureService: import('../../services/capture.service').CaptureService;
 
-    constructor($uibModalInstance: angular.ui.bootstrap.IModalInstanceService, item: PdfItem, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
+    constructor($uibModalInstance: angular.ui.bootstrap.IModalInstanceService, item: PdfItem, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService, $timeout: ng.ITimeoutService) {
         this.$uibModalInstance = $uibModalInstance;
         this.item = item;
         this.toaster = toaster;
         this.CaptureService = CaptureService;
+        this.$timeout = $timeout;
         this.originalMarkdown = item.markdownData || '';
     }
 

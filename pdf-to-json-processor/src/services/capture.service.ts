@@ -48,6 +48,8 @@ export class CaptureService {
             document.body.appendChild(container);
             this.$compile(container)(scope);
 
+            let cleanup: (() => void) | null = null;
+
             if (isImage) {
                 const imgElement = container.querySelector('#capture-image-target') as HTMLImageElement;
                 
@@ -85,9 +87,9 @@ export class CaptureService {
             } else {
                 // For PDFs, wait for the component to emit PDF_RENDERED
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const cleanup = scope.$on('PDF_RENDERED', async (_event: any, itemId: string) => {
+                cleanup = scope.$on('PDF_RENDERED', async (_event: any, itemId: string) => {
                     if (itemId === item.id) {
-                        cleanup();
+                        if (cleanup) cleanup();
                         
                         try {
                             // Allow DOM to settle
@@ -119,7 +121,7 @@ export class CaptureService {
 
             // Timeout fallback
             this.$timeout(() => {
-                cleanup();
+                if (cleanup) cleanup();
                 if (document.body.contains(container)) {
                     document.body.removeChild(container);
                 }
