@@ -175,6 +175,8 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
             const completedItems = this.QueueService.items.filter(i => i.status === 'success');
             if (completedItems.length === 0) return;
 
+            this.toaster.pop('info', 'Downloading', `Preparing to download ${completedItems.length} items...`);
+
             try {
                 const zip = new JSZip();
                 
