@@ -11,4 +11,5 @@ export interface PdfItem {
     progress?: number; // Tracks completion percentage (0 - 100)
     fileSizeStr?: string; // e.g. "12.8 MB"
     errorMessage?: string;
+    useLocalModel?: boolean;
 }

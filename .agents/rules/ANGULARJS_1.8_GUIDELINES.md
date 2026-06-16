@@ -1,5 +1,5 @@
 ---
-trigger: model_decision
+trigger: always_on
 description: Code Rule For AngularJS 1.8.x
 ---
 

@@ -9,11 +9,25 @@ export class ApiService {
      * @param file File PDF cần OCR
      * @returns PdfItem (một phần dữ liệu) chứa kết quả markdown, json và trạng thái
      */
-    static async processPdf(file: File): Promise<Partial<PdfItem>> {
+    static async processPdf(file: File, useLocalModel: boolean = false): Promise<Partial<PdfItem>> {
         const formData = new FormData();
         formData.append('file', file);
 
         try {
+            if (useLocalModel) {
+                const localApiUrl = 'http://localhost:8000/api/v1/extract-po';
+                const response: AxiosResponse = await axios.post(localApiUrl, formData, {
+                    headers: { 'accept': 'application/json' }
+                });
+                const data = response.data;
+                return {
+                    status: 'success',
+                    markdownData: data.markdown_content || '',
+                    jsonData: null,
+                    errorMessage: undefined
+                };
+            }
+
             const response: AxiosResponse<ApiResponse> = await axios.post(API_URL, formData, {
                 headers: {
                     'accept': 'application/json'

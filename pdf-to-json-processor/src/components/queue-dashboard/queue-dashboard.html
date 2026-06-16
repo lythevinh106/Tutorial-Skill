@@ -22,8 +22,14 @@
             <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">Max 100 pages</span>
         </div>
         
-        <!-- Split Mode Toggle -->
+        <!-- Split Mode & Local AI Toggles -->
         <div class="absolute top-6 right-6 flex items-center gap-3 z-10 bg-white/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/40 shadow-sm" onclick="event.stopPropagation()">
+            <label class="relative inline-flex items-center cursor-pointer mb-0">
+                <input type="checkbox" ng-model="$ctrl.useLocalModel" class="sr-only peer">
+                <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner border border-outline-variant/20"></div>
+                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap">Local AI</span>
+            </label>
+            <div class="w-[1px] h-4 bg-outline-variant/30"></div>
             <label class="relative inline-flex items-center cursor-pointer mb-0">
                 <input type="checkbox" ng-model="$ctrl.isSplitMode" class="sr-only peer">
                 <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20"></div>

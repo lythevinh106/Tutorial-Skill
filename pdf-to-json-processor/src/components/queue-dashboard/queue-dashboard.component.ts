@@ -21,6 +21,7 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         private $scope: ng.IScope;
         private toaster: IToasterService;
         public isSplitMode: boolean = false;
+        public useLocalModel: boolean = false;
 
         constructor(QueueService: import('../../services/queue.service').QueueService, $element: ng.IAugmentedJQuery, $scope: ng.IScope, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
             this.QueueService = QueueService;
@@ -96,9 +97,9 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                         splitFiles.push(file);
                     }
                 }
-                this.QueueService.enqueue(splitFiles as unknown as FileList);
+                this.QueueService.enqueue(splitFiles as unknown as FileList, this.useLocalModel);
             } else {
-                this.QueueService.enqueue(files);
+                this.QueueService.enqueue(files, this.useLocalModel);
             }
             this.$scope.$applyAsync();
         }
