@@ -3,6 +3,10 @@ import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { db } from '../../services/db';
+import * as pdfjsLib from 'pdfjs-dist';
+import 'pdfjs-dist/build/pdf.worker.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '';
 
 interface IToasterService {
     pop(type: string, title: string, body: string): void;
@@ -19,8 +23,9 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         public CaptureService: import('../../services/capture.service').CaptureService;
         private $element: ng.IAugmentedJQuery;
         private $scope: ng.IScope;
-        private toaster: IToasterService;
+        public toaster: IToasterService;
         public isSplitMode: boolean = false;
+        public isConvertMode: boolean = false;
 
         constructor(QueueService: import('../../services/queue.service').QueueService, $element: ng.IAugmentedJQuery, $scope: ng.IScope, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
             this.QueueService = QueueService;
@@ -28,6 +33,12 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
             this.$element = $element;
             this.$scope = $scope;
             this.toaster = toaster;
+        }
+
+        onConvertModeChange() {
+            if (this.isConvertMode) {
+                this.isSplitMode = true;
+            }
         }
 
         $postLink() {
@@ -68,7 +79,54 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         }
         
         private async processFiles(files: FileList | File[]) {
-            if (this.isSplitMode) {
+            if (this.isConvertMode) {
+                const convertedFiles: File[] = [];
+                this.toaster.pop('info', 'Converting PDF', 'Converting PDF pages to high-resolution images...');
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type !== 'application/pdf') {
+                        convertedFiles.push(file);
+                        continue;
+                    }
+                    try {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                        const pageCount = pdfDoc.numPages;
+
+                        for (let j = 1; j <= pageCount; j++) {
+                            const page = await pdfDoc.getPage(j);
+                            const viewport = page.getViewport({ scale: 2.0 });
+                            
+                            const canvas = document.createElement('canvas');
+                            const context = canvas.getContext('2d');
+                            if (!context) continue;
+
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            
+                            await page.render(renderContext).promise;
+                            
+                            const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'));
+                            if (blob) {
+                                const newName = file.name.replace(/\.pdf$/i, `_Page_${j}.png`);
+                                const splitFile = new File([blob], newName, { type: 'image/png' });
+                                convertedFiles.push(splitFile);
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error converting PDF to Image', err);
+                        this.toaster.pop('error', 'Error', `Failed to convert ${file.name} to images.`);
+                        convertedFiles.push(file);
+                    }
+                }
+                this.QueueService.enqueue(convertedFiles as unknown as FileList);
+            } else if (this.isSplitMode) {
                 const splitFiles: File[] = [];
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];

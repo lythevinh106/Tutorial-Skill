@@ -1,7 +1,7 @@
 <!-- Queue Item: Processing -->
 <div ng-if="$ctrl.item.status === 'processing'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
     <div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-electric-ocean">picture_as_pdf</span>
+        <span class="material-symbols-outlined text-electric-ocean">{{ $ctrl.item.fileType && $ctrl.item.fileType.includes('image') ? 'image' : 'picture_as_pdf' }}</span>
     </div>
     <div class="flex-1 flex flex-col gap-2 min-w-0">
         <div class="flex justify-between items-baseline">
@@ -26,7 +26,7 @@
 <!-- Queue Item: Uploading -->
 <div ng-if="$ctrl.item.status === 'uploading'" class="bg-frosted-surface backdrop-blur-xl rounded-[16px] border border-whisper-border p-4 flex items-center gap-6 shadow-sm hover:shadow-md transition-shadow">
     <div class="w-12 h-12 rounded-lg bg-white/50 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-secondary">description</span>
+        <span class="material-symbols-outlined text-secondary">{{ $ctrl.item.fileType && $ctrl.item.fileType.includes('image') ? 'image' : 'description' }}</span>
     </div>
     <div class="flex-1 flex flex-col gap-2 min-w-0">
         <div class="flex justify-between items-baseline">
@@ -80,7 +80,7 @@
                     <div class="flex-1 rounded-xl border-whisper-border shadow-sm overflow-hidden flex flex-col relative bg-white">
                         <div class="p-4 border-whisper-border flex justify-between items-center z-10 bg-white/80 backdrop-blur-sm shadow-sm relative">
                             <div class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-muted-steel">description</span>
+                                <span class="material-symbols-outlined text-muted-steel">{{ $ctrl.item.fileType && $ctrl.item.fileType.includes('image') ? 'image' : 'description' }}</span>
                                 <div class="flex flex-col">
                                     <span class="text-[12px] font-bold text-charcoal-ink">{{$ctrl.item.name}}</span>
                                     <span class="text-[10px] text-muted-steel">{{$ctrl.item.fileSizeStr}}</span>
@@ -92,7 +92,10 @@
                             </div>
                         </div>
                         <div class="flex-1 overflow-hidden bg-white flex flex-col relative">
-                            <screen-pdf item="$ctrl.item" class="h-full w-full block"></screen-pdf>
+                            <screen-pdf ng-if="!$ctrl.item.fileType || $ctrl.item.fileType.includes('pdf')" item="$ctrl.item" class="h-full w-full block"></screen-pdf>
+                            <div ng-if="$ctrl.item.fileType && $ctrl.item.fileType.includes('image')" class="flex-1 w-full h-full flex items-start justify-center p-4 bg-surface-container-low/50 overflow-auto custom-scrollbar">
+                                <img ng-src="{{$ctrl.item.pdfUrl}}" class="max-w-full max-h-full object-contain shadow-sm rounded" alt="{{$ctrl.item.name}}" />
+                            </div>
                         </div>
                     </div>
                     <!-- Right Side: Markdown View -->

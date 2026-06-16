@@ -79,7 +79,8 @@ export class QueueService {
                 jsonData: null,
                 status: 'pending',
                 progress: 0,
-                fileSizeStr: formatBytes(file.size)
+                fileSizeStr: formatBytes(file.size),
+                fileType: file.type
             };
             
             item._file = file; 

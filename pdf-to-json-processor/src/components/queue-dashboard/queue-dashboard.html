@@ -11,23 +11,29 @@
     <div file-drop 
          on-drop="$ctrl.handleFiles(files)" 
          class="w-full min-w-[95%] max-w-[95%] bg-frosted-surface backdrop-blur-2xl rounded-[24px] border-2 border-dashed border-whisper-border upload-pulse upload-zone p-12 flex flex-col items-center justify-center gap-4 shadow-[0_8px_32px_rgba(0,0,0,0.08)] cursor-pointer group relative overflow-hidden" onclick="document.getElementById('fileUpload').click()">
-        <input type="file" id="fileUpload" multiple class="hidden" accept="application/pdf" />
+        <input type="file" id="fileUpload" multiple class="hidden" accept="application/pdf,image/png,image/jpeg,image/webp,image/gif" />
         <div class="w-20 h-20 rounded-full bg-white/40 flex items-center justify-center mb-4 group-hover:bg-electric-ocean/10 transition-colors">
             <span class="material-symbols-outlined text-[40px] text-electric-ocean" style="font-variation-settings: 'FILL' 1;">cloud_upload</span>
         </div>
         <h2 class="font-headline-md text-headline-md text-charcoal-ink text-center">Drag &amp; Drop Documents</h2>
         <p class="font-body-md text-body-md text-muted-steel text-center">or <span class="text-electric-ocean font-medium underline underline-offset-4 decoration-electric-ocean/30 hover:decoration-electric-ocean transition-all">browse files</span> from your computer</p>
         <div class="flex gap-4 mt-6">
-            <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">PDF up to 50MB</span>
+            <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">PDF & Images up to 50MB</span>
             <span class="px-3 py-1 bg-white/50 rounded-full font-label-sm text-label-sm text-muted-steel border border-whisper-border">Max 100 pages</span>
         </div>
         
         <!-- Split Mode Toggle -->
         <div class="absolute top-6 right-6 flex items-center gap-3 z-10 bg-white/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/40 shadow-sm" onclick="event.stopPropagation()">
             <label class="relative inline-flex items-center cursor-pointer mb-0">
-                <input type="checkbox" ng-model="$ctrl.isSplitMode" class="sr-only peer">
+                <input type="checkbox" ng-model="$ctrl.isConvertMode" ng-change="$ctrl.onConvertModeChange()" class="sr-only peer">
                 <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20"></div>
-                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap">Split Page</span>
+                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap">Convert To Image</span>
+            </label>
+            <div class="w-px h-4 bg-outline-variant/30"></div>
+            <label class="relative inline-flex items-center cursor-pointer mb-0">
+                <input type="checkbox" ng-model="$ctrl.isSplitMode" ng-disabled="$ctrl.isConvertMode" class="sr-only peer">
+                <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20 peer-disabled:opacity-50"></div>
+                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap" ng-class="{'opacity-50': $ctrl.isConvertMode}">Split Page</span>
             </label>
         </div>
     </div>
