@@ -105,7 +105,8 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                             canvas.height = viewport.height;
                             canvas.width = viewport.width;
 
-                            const renderContext = {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            const renderContext: any = {
                                 canvasContext: context,
                                 viewport: viewport
                             };
