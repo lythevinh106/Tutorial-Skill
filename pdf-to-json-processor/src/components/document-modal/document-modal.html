@@ -56,9 +56,18 @@
             <button ng-if="$ctrl.item.markdownData !== $ctrl.originalMarkdown" ng-click="$ctrl.updateMarkdown()"
                 class="px-5 py-2 rounded-full bg-surface-container-lowest border border-whisper-border text-charcoal-ink font-medium text-[12px] hover:bg-white shadow-sm transition-transform active:translate-y-px">Update
                 Markdown</button>
-            <button ng-click="$ctrl.downloadQueue()"
-                class="bg-electric-ocean text-white rounded-full px-6 py-2 font-label-sm text-[12px] flex items-center gap-2 hover:opacity-90 transition-opacity shadow-md">
-                <span class="material-symbols-outlined text-[16px]">download</span> Download Queue
+            <button ng-click="$ctrl.downloadQueue()" ng-disabled="$ctrl.isDownloading"
+                class="bg-electric-ocean text-white rounded-full px-6 py-2 font-label-sm text-[12px] flex items-center gap-2 hover:opacity-90 transition-opacity shadow-md disabled:opacity-70">
+                <span ng-if="!$ctrl.isDownloading" class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">download</span> Download Queue
+                </span>
+                <span ng-if="$ctrl.isDownloading" class="flex items-center gap-2">
+                    <svg class="animate-spin w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                </span>
             </button>
         </div>
     </div>

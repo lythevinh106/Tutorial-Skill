@@ -28,15 +28,17 @@ export class CaptureService {
             container.style.left = '-9999px';
             container.style.width = '1920px';
             container.style.height = '1080px';
-            container.style.opacity = '1';
-            container.style.pointerEvents = 'none';
+            const isImage = item.fileType && item.fileType.includes('image');
+
+            const leftPanel = isImage
+                ? `<div class="flex-1 w-full h-full flex items-start justify-center p-4 bg-surface-container-low/50 overflow-auto custom-scrollbar">
+                        <img id="capture-image-target" src="${item.pdfUrl}" class="max-w-full max-h-[1000px] object-contain shadow-sm rounded" />
+                   </div>`
+                : `<screen-pdf item="item" class="h-full w-full block"></screen-pdf>`;
 
             container.innerHTML = `
-                <div class="w-full lg:w-1/2 flex flex-col relative h-full bg-surface-container-low/50 overflow-hidden">
-                    <screen-pdf ng-if="!item.fileType || item.fileType.includes('pdf')" item="item" class="h-full w-full block"></screen-pdf>
-                    <div ng-if="item.fileType && item.fileType.includes('image')" class="flex-1 w-full h-full flex items-start justify-center p-4 overflow-auto custom-scrollbar">
-                        <img ng-src="{{item.pdfUrl}}" class="max-w-full max-h-[1000px] object-contain shadow-lg rounded" alt="{{item.name}}" />
-                    </div>
+                <div class="w-full lg:w-1/2 flex flex-col relative h-full overflow-hidden">
+                    ${leftPanel}
                 </div>
                 <div class="w-full lg:w-1/2 flex flex-col h-full bg-slate-50/50 backdrop-blur-xl relative border-l border-whisper-border">
                     <screen-markdown item="item" is-modal-view="true" class="h-full w-full flex flex-col"></screen-markdown>
@@ -46,11 +48,10 @@ export class CaptureService {
             document.body.appendChild(container);
             this.$compile(container)(scope);
 
-            const isImage = item.fileType && item.fileType.includes('image');
-
             if (isImage) {
-                // For images, don't wait for PDF_RENDERED. Just wait briefly for image to load.
-                this.$timeout(async () => {
+                const imgElement = container.querySelector('#capture-image-target') as HTMLImageElement;
+                
+                const executeCapture = async () => {
                     try {
                         const blob = await domToBlob(container, {
                             scale: 1,
@@ -71,7 +72,16 @@ export class CaptureService {
                         }
                         scope.$destroy();
                     }
-                }, 1500); // Give image 1.5s to fully render
+                };
+
+                if (imgElement && imgElement.complete) {
+                    this.$timeout(executeCapture, 500);
+                } else if (imgElement) {
+                    imgElement.onload = () => this.$timeout(executeCapture, 500);
+                    imgElement.onerror = () => reject(new Error('Failed to load image for capture'));
+                } else {
+                    this.$timeout(executeCapture, 1500);
+                }
             } else {
                 // For PDFs, wait for the component to emit PDF_RENDERED
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

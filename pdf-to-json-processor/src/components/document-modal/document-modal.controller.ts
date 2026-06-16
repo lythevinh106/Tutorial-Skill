@@ -11,6 +11,7 @@ export class DocumentModalController {
     static $inject = ['$uibModalInstance', 'item', 'toaster', 'CaptureService'];
     item: PdfItem;
     originalMarkdown: string;
+    public isDownloading: boolean = false;
     private $uibModalInstance: angular.ui.bootstrap.IModalInstanceService;
     private toaster: IToasterService;
     private CaptureService: import('../../services/capture.service').CaptureService;
@@ -39,6 +40,8 @@ export class DocumentModalController {
     }
 
     async downloadQueue() {
+        if (this.isDownloading) return;
+        this.isDownloading = true;
         try {
             if (!this.item.pdfUrl || !this.item.markdownData) return;
             
@@ -69,6 +72,10 @@ export class DocumentModalController {
         } catch (error) {
             console.error("Error downloading item:", error);
             this.toaster.pop('error', '', 'Error - Failed to download queue item.');
+        } finally {
+            this.$timeout(() => {
+                this.isDownloading = false;
+            });
         }
     }
 
