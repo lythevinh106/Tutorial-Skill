@@ -31,6 +31,12 @@
             </label>
             <div class="w-px h-4 bg-outline-variant/30"></div>
             <label class="relative inline-flex items-center cursor-pointer mb-0">
+                <input type="checkbox" ng-model="$ctrl.isLocalLlmMode" ng-change="$ctrl.onLocalLlmModeChange()" class="sr-only peer">
+                <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20"></div>
+                <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap text-purple-600">Use Local LLM</span>
+            </label>
+            <div class="w-px h-4 bg-outline-variant/30"></div>
+            <label class="relative inline-flex items-center cursor-pointer mb-0">
                 <input type="checkbox" ng-model="$ctrl.isSplitMode" ng-disabled="$ctrl.isConvertMode" class="sr-only peer">
                 <div class="w-9 h-5 bg-white/80 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:shadow-sm after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-electric-ocean shadow-inner border border-outline-variant/20 peer-disabled:opacity-50"></div>
                 <span class="ml-2 text-[12px] font-bold text-charcoal-ink whitespace-nowrap" ng-class="{'opacity-50': $ctrl.isConvertMode}">Split Page</span>

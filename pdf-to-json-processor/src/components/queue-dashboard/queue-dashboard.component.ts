@@ -24,8 +24,9 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         private $element: ng.IAugmentedJQuery;
         private $scope: ng.IScope;
         public toaster: IToasterService;
-        public isSplitMode: boolean = false;
-        public isConvertMode: boolean = false;
+        public isSplitMode: boolean = true;
+        public isConvertMode: boolean = true;
+        public isLocalLlmMode: boolean = true;
 
         constructor(QueueService: import('../../services/queue.service').QueueService, $element: ng.IAugmentedJQuery, $scope: ng.IScope, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
             this.QueueService = QueueService;
@@ -37,6 +38,13 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
 
         onConvertModeChange() {
             if (this.isConvertMode) {
+                this.isSplitMode = true;
+            }
+        }
+
+        onLocalLlmModeChange() {
+            if (this.isLocalLlmMode) {
+                this.isConvertMode = true;
                 this.isSplitMode = true;
             }
         }
@@ -126,7 +134,7 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                         convertedFiles.push(file);
                     }
                 }
-                this.QueueService.enqueue(convertedFiles as unknown as FileList);
+                this.QueueService.enqueue(convertedFiles as unknown as FileList, this.isLocalLlmMode);
             } else if (this.isSplitMode) {
                 const splitFiles: File[] = [];
                 for (let i = 0; i < files.length; i++) {
@@ -155,9 +163,9 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                         splitFiles.push(file);
                     }
                 }
-                this.QueueService.enqueue(splitFiles as unknown as FileList);
+                this.QueueService.enqueue(splitFiles as unknown as FileList, this.isLocalLlmMode);
             } else {
-                this.QueueService.enqueue(files);
+                this.QueueService.enqueue(files, this.isLocalLlmMode);
             }
             this.$scope.$applyAsync();
         }

@@ -12,4 +12,5 @@ export interface PdfItem {
     fileSizeStr?: string; // e.g. "12.8 MB"
     errorMessage?: string;
     fileType?: string; // e.g. "image/png" or "application/pdf"
+    useLocalLlm?: boolean;
 }

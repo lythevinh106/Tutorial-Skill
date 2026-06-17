@@ -62,7 +62,7 @@ export class QueueService {
         return clean as PdfItem;
     }
 
-    public enqueue(files: FileList | File[]): void {
+    public enqueue(files: FileList | File[], useLocalLlm: boolean = false): void {
         const newItems: QueueItem[] = [];
         
         for (let i = 0; i < files.length; i++) {
@@ -80,7 +80,8 @@ export class QueueService {
                 status: 'pending',
                 progress: 0,
                 fileSizeStr: formatBytes(file.size),
-                fileType: file.type
+                fileType: file.type,
+                useLocalLlm
             };
             
             item._file = file; 
@@ -126,7 +127,7 @@ export class QueueService {
             item.progress = 0;
             this.startFakeProgress(item);
             
-            ApiService.processPdf(file).then(result => {
+            ApiService.processPdf(file, item.useLocalLlm).then(result => {
                 this.$timeout(() => {
                     if (item._progressTimer) {
                         this.$timeout.cancel(item._progressTimer);
