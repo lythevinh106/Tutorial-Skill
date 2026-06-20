@@ -18,9 +18,10 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         onSelect: '&'
     },
     controller: class QueueDashboardController {
-        static $inject = ['QueueService', '$element', '$scope', 'toaster', 'CaptureService'];
+        static $inject = ['QueueService', '$element', '$scope', 'toaster', 'CaptureService', 'AppModeService'];
         public QueueService: import('../../services/queue.service').QueueService;
         public CaptureService: import('../../services/capture.service').CaptureService;
+        public AppModeService: import('../../services/app-mode.service').AppModeService;
         private $element: ng.IAugmentedJQuery;
         private $scope: ng.IScope;
         public toaster: IToasterService;
@@ -28,12 +29,17 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
         public isConvertMode: boolean = true;
         public isLocalLlmMode: boolean = true;
 
-        constructor(QueueService: import('../../services/queue.service').QueueService, $element: ng.IAugmentedJQuery, $scope: ng.IScope, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService) {
+        constructor(QueueService: import('../../services/queue.service').QueueService, $element: ng.IAugmentedJQuery, $scope: ng.IScope, toaster: IToasterService, CaptureService: import('../../services/capture.service').CaptureService, AppModeService: import('../../services/app-mode.service').AppModeService) {
             this.QueueService = QueueService;
             this.CaptureService = CaptureService;
+            this.AppModeService = AppModeService;
             this.$element = $element;
             this.$scope = $scope;
             this.toaster = toaster;
+        }
+
+        get currentItems() {
+            return this.QueueService.items.filter(item => (item.mode || 'markdown') === this.AppModeService.currentMode);
         }
 
         onConvertModeChange() {
@@ -134,7 +140,7 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                         convertedFiles.push(file);
                     }
                 }
-                this.QueueService.enqueue(convertedFiles as unknown as FileList, this.isLocalLlmMode);
+                this.QueueService.enqueue(convertedFiles as unknown as FileList, this.isLocalLlmMode, this.AppModeService.currentMode);
             } else if (this.isSplitMode) {
                 const splitFiles: File[] = [];
                 for (let i = 0; i < files.length; i++) {
@@ -163,24 +169,27 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                         splitFiles.push(file);
                     }
                 }
-                this.QueueService.enqueue(splitFiles as unknown as FileList, this.isLocalLlmMode);
+                this.QueueService.enqueue(splitFiles as unknown as FileList, this.isLocalLlmMode, this.AppModeService.currentMode);
             } else {
-                this.QueueService.enqueue(files, this.isLocalLlmMode);
+                this.QueueService.enqueue(files, this.isLocalLlmMode, this.AppModeService.currentMode);
             }
             this.$scope.$applyAsync();
         }
         
         clearCompleted() {
-            const completed = this.QueueService.items.filter(item => item.status === 'success');
+            const completed = this.currentItems.filter(item => item.status === 'success');
             if (completed.length > 0) {
-                completed.forEach(c => db.delete(c.id));
-                this.QueueService.items = this.QueueService.items.filter(item => item.status !== 'success');
+                completed.forEach(c => {
+                    db.delete(c.id);
+                    const idx = this.QueueService.items.indexOf(c);
+                    if (idx > -1) this.QueueService.items.splice(idx, 1);
+                });
                 this.toaster.pop('success', '', 'All completed documents deleted successfully.');
             }
         }
 
         public async downloadAllCompleted() {
-            const completedItems = this.QueueService.items.filter(i => i.status === 'success');
+            const completedItems = this.currentItems.filter(i => i.status === 'success');
             if (completedItems.length === 0) return;
 
             this.toaster.pop('info', 'Downloading', `Preparing to download ${completedItems.length} items...`);
@@ -189,7 +198,7 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                 const zip = new JSZip();
                 
                 for (const item of completedItems) {
-                    if (!item.pdfUrl || !item.markdownData) continue;
+                    if (!item.pdfUrl) continue;
                     
                     const folderName = item.name.replace(/\.[^/.]+$/, "");
                     const folder = zip.folder(folderName);
@@ -199,7 +208,12 @@ export const QueueDashboardComponent: ng.IComponentOptions = {
                     const pdfBlob = await pdfResponse.blob();
                     folder.file(item.name, pdfBlob);
 
-                    folder.file(`${folderName}.md`, item.markdownData);
+                    if (item.mode === 'json' && item.jsonData) {
+                        const jsonStr = typeof item.jsonData === 'string' ? item.jsonData : JSON.stringify(item.jsonData, null, 2);
+                        folder.file(`${folderName}.json`, jsonStr);
+                    } else if (item.markdownData) {
+                        folder.file(`${folderName}.md`, item.markdownData);
+                    }
 
                     try {
                         this.toaster.pop('info', '', `Generating screen capture for ${item.name}...`);

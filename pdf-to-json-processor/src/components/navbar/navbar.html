@@ -7,10 +7,8 @@
 </div>
 <!-- Navigation Links (Web) -->
 <nav class="hidden md:flex gap-8 items-center h-full">
-<a aria-current="page" class="text-electric-ocean font-bold border-b-2 border-electric-ocean pb-1 font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center pt-1" href="#">Markdown Api</a>
-<a class="text-muted-steel dark:text-outline-variant font-medium hover:text-charcoal-ink font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center" href="#"> Json Api</a>
-
-
+<a href="#" ng-click="$ctrl.setMode('markdown', $event)" ng-class="$ctrl.AppModeService.currentMode === 'markdown' ? 'text-electric-ocean font-bold border-b-2 border-electric-ocean pb-1 font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center pt-1' : 'text-muted-steel dark:text-outline-variant font-medium hover:text-charcoal-ink font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center'">Markdown Api</a>
+<a href="#" ng-click="$ctrl.setMode('json', $event)" ng-class="$ctrl.AppModeService.currentMode === 'json' ? 'text-electric-ocean font-bold border-b-2 border-electric-ocean pb-1 font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center pt-1' : 'text-muted-steel dark:text-outline-variant font-medium hover:text-charcoal-ink font-label-sm text-label-sm hover:bg-white/20 transition-all duration-200 h-full flex items-center'">Json Api</a>
 </nav>
 <!-- Actions -->
 <div class="flex items-center gap-4">

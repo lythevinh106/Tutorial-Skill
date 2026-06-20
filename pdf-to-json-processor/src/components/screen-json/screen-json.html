@@ -1,0 +1,29 @@
+<div class="h-full flex flex-col font-code-md">
+    <div class="p-4 border-b border-whisper-border flex justify-between items-center bg-white/40">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-electric-ocean">data_object</span>
+            <div class="flex flex-col">
+                <span class="text-[12px] font-bold text-charcoal-ink">JSON Editor</span>
+                <span class="text-[10px] text-muted-steel" ng-if="$ctrl.isValidJson">Valid JSON</span>
+                <span class="text-[10px] text-error" ng-if="!$ctrl.isValidJson">Invalid JSON Syntax</span>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button ng-click="$ctrl.clearAllHighlights()" class="bg-white border border-outline-variant/30 px-3 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 hover:bg-surface-variant transition-colors">
+                <span class="material-symbols-outlined text-[14px]">format_clear</span> Clear Marks
+            </button>
+            <button ng-click="$ctrl.handleSave()" ng-disabled="!$ctrl.isValidJson" ng-class="{'opacity-50 cursor-not-allowed': !$ctrl.isValidJson}" class="bg-electric-ocean text-white px-3 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 hover:bg-electric-ocean/90 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">save</span> Save JSON
+            </button>
+        </div>
+    </div>
+    <div class="flex-1 relative">
+        <div id="ace-editor-container-{{$ctrl.item.id}}" class="absolute inset-0"></div>
+    </div>
+    <div class="p-2 bg-white/20 border-t border-whisper-border flex justify-between items-center">
+        <div class="flex items-center gap-4 text-[10px] text-muted-steel">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#fde047]"></span> Ctrl+D: Yellow</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> Ctrl+B: Red</span>
+        </div>
+    </div>
+</div>

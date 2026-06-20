@@ -44,16 +44,16 @@
         </div>
     </div>
     <!-- Queue List -->
-    <div class="w-full min-w-[95%] max-w-[95%] flex flex-col gap-4 mb-20" ng-if="$ctrl.QueueService.items.length > 0">
+    <div class="w-full min-w-[95%] max-w-[95%] flex flex-col gap-4 mb-20" ng-if="$ctrl.currentItems.length > 0">
         <div class="flex justify-between items-center px-4">
-            <h3 class="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider">Active Queue ({{$ctrl.QueueService.items.length}})</h3>
+            <h3 class="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider">Active Queue ({{$ctrl.currentItems.length}})</h3>
             <div class="flex gap-4">
                 <button ng-click="$ctrl.downloadAllCompleted()" class="font-label-sm text-label-sm text-electric-ocean hover:underline underline-offset-4 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">download_for_offline</span> Download All Queue</button>
                 <button ng-click="$ctrl.clearCompleted()" class="font-label-sm text-label-sm text-error hover:underline underline-offset-4 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">delete_sweep</span> Clear Completed</button>
             </div>
         </div>
         <!-- Render Queue Items -->
-        <queue-item ng-repeat="item in $ctrl.QueueService.items track by item.id" 
+        <queue-item ng-repeat="item in $ctrl.currentItems track by item.id" 
                     item="item"
                     on-delete="$ctrl.deleteItem(item)"
                     on-retry="$ctrl.QueueService.retry(item)">

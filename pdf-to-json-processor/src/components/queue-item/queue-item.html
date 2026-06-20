@@ -98,9 +98,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Right Side: Markdown View -->
+                    <!-- Right Side: Markdown/JSON View -->
                     <div class="flex-1 border-l border-white/20 bg-white/20 backdrop-blur-sm overflow-hidden flex flex-col font-code-md">
-                        <screen-markdown item="$ctrl.item" class="h-full flex flex-col"></screen-markdown>
+                        <screen-markdown ng-if="$ctrl.item.mode !== 'json'" item="$ctrl.item" class="h-full flex flex-col"></screen-markdown>
+                        <screen-json ng-if="$ctrl.item.mode === 'json'" item="$ctrl.item" on-save="$ctrl.updateJson($event.jsonData, $event.jsonHighlights)" class="h-full flex flex-col"></screen-json>
                     </div>
                 </div>
             </div>

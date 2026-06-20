@@ -34,6 +34,7 @@
   "dependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/markdown-it-highlightjs": "^3.3.4",
+    "ace-builds": "^1.44.0",
     "angular": "^1.8.3",
     "angular-animate": "^1.8.3",
     "angular-ui-bootstrap": "^2.5.6",

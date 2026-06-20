@@ -9,6 +9,7 @@ import { QueueItemComponent } from './components/queue-item/queue-item.component
 import { PdfViewerComponent } from './components/pdf-viewer/pdf-viewer.component';
 import { ScreenPdfComponent } from './components/screen-pdf/screen-pdf.component';
 import { ScreenMarkdownComponent } from './components/screen-markdown/screen-markdown.component';
+import { ScreenJsonComponent } from './components/screen-json/screen-json.component';
 import 'angular-animate';
 import 'angularjs-toaster';
 import 'angularjs-toaster/toaster.css';
@@ -19,10 +20,12 @@ const app = angular.module('pdfProcessorApp', ['ui.bootstrap', 'ngAnimate', 'toa
 import { QueueService } from './services/queue.service';
 import { ApiService } from './services/api.service';
 import { CaptureService } from './services/capture.service';
+import { AppModeService } from './services/app-mode.service';
 
 app.service('QueueService', QueueService);
 app.service('ApiService', ApiService);
 app.service('CaptureService', CaptureService);
+app.service('AppModeService', AppModeService);
 
 // Đăng ký Controller bằng Class chuẩn ES6 (Chống vỡ code khi nén)
 app.controller('MainController', MainController);
@@ -34,6 +37,7 @@ app.component('queueItem', QueueItemComponent);
 app.component('pdfViewer', PdfViewerComponent);
 app.component('screenPdf', ScreenPdfComponent);
 app.component('screenMarkdown', ScreenMarkdownComponent);
+app.component('screenJson', ScreenJsonComponent);
 
 // Bootstrap thủ công với DOMContentLoaded (chuẩn Vite ES Module)
 angular.element(document).ready(() => {

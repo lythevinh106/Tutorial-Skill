@@ -62,7 +62,7 @@ export class QueueService {
         return clean as PdfItem;
     }
 
-    public enqueue(files: FileList | File[], useLocalLlm: boolean = false): void {
+    public enqueue(files: FileList | File[], useLocalLlm: boolean = false, mode: 'markdown' | 'json' = 'markdown'): void {
         const newItems: QueueItem[] = [];
         
         for (let i = 0; i < files.length; i++) {
@@ -81,7 +81,8 @@ export class QueueService {
                 progress: 0,
                 fileSizeStr: formatBytes(file.size),
                 fileType: file.type,
-                useLocalLlm
+                useLocalLlm,
+                mode
             };
             
             item._file = file; 
@@ -127,7 +128,7 @@ export class QueueService {
             item.progress = 0;
             this.startFakeProgress(item);
             
-            ApiService.processPdf(file, item.useLocalLlm).then(result => {
+            ApiService.processPdf(file, item.useLocalLlm, item.mode).then(result => {
                 this.$timeout(() => {
                     if (item._progressTimer) {
                         this.$timeout.cancel(item._progressTimer);

@@ -41,6 +41,14 @@ export class DocumentModalController {
         this.$uibModalInstance.close('update');
     }
 
+    updateJson(jsonData: unknown, jsonHighlights: import('../../models').IJsonHighlight[]) {
+        this.item.jsonData = jsonData;
+        this.item.jsonHighlights = jsonHighlights;
+        db.put(this.item);
+        this.toaster.pop('warning', '', 'Queue Updated - JSON changes saved.');
+        this.$uibModalInstance.close('update');
+    }
+
     async downloadQueue() {
         if (this.isDownloading) return;
         this.isDownloading = true;
@@ -57,7 +65,12 @@ export class DocumentModalController {
             const pdfBlob = await pdfResponse.blob();
             folder.file(this.item.name, pdfBlob);
 
-            folder.file(`${folderName}.md`, this.item.markdownData);
+            if (this.item.mode === 'json' && this.item.jsonData) {
+                const jsonStr = typeof this.item.jsonData === 'string' ? this.item.jsonData : JSON.stringify(this.item.jsonData, null, 2);
+                folder.file(`${folderName}.json`, jsonStr);
+            } else if (this.item.markdownData) {
+                folder.file(`${folderName}.md`, this.item.markdownData);
+            }
 
             try {
                 this.toaster.pop('info', '', `Generating screen capture...`);
